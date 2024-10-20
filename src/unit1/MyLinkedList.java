@@ -48,29 +48,25 @@ public class MyLinkedList <Type extends Comparable<Type>> {
     //new first node.
     //○ This method should run in O(1) time.
     public void addBefore(Type item) {
-        // Create a new node that will point to 'current'
-        Node newNode = new Node(item, current);
+        Node newNode = new Node(item, current);  // Create a new node pointing to 'current'
 
-        if (current == null) {  // Case: Add at the end of the list
-            if (size == 0) {  // If the list is empty, new node becomes the first node
-                first = newNode;
-            } else {  // Find the last node and add newNode there
-                Node last = first;
-                while (last.next != null) {
-                    last = last.next;
-                }
-                last.next = newNode;
+        if (current == null) {  // Case: Add at the end
+            if (previous != null) {
+                previous.next = newNode;  // Add after the previous node
+            } else {
+                first = newNode;  // If the list is empty, the new node becomes the first node
             }
         } else if (current == first) {  // Case: Add before the first node
-            first = newNode;  // Update 'first' to point to newNode
+            newNode.next = first;  // Point new node to the old first node
+            first = newNode;  // Update first to the new node
         } else {  // Case: Add between 'previous' and 'current'
-            previous.next = newNode;  // Link previous node to newNode
+            previous.next = newNode;  // Link previous node to the new node
         }
 
-        // Update 'previous' to point to the newly added node
-        previous = newNode;
-        size++;  // Increment the size of the list
+        previous = newNode;  // Update previous to point to the new node
+        size++;  // Increment size
     }
+
 
     // Adds the item after the current node.
     public void addAfter(Type item){
