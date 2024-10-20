@@ -17,11 +17,21 @@ public class MyLinkedList <Type extends Comparable<Type>> {
         }
     }
     //A reference to the first node in the list.
+   //○ Is null if the list is empty.
+    //○ This reference should be updated whenever the first node is changed
     protected Node first;
-    //A reference to the current node in the list.
 
+    //A reference to the current node in the list.
+    //○ The current node of the list is used to traverse.
+    //○ The current node should only be changed by the methods first, next and
+    //remove.
+    //○ Initialized to be the null.
+    //○ When this node is null the current node has fallen off the end of the list
     protected Node current;
     //A reference to the node before the current node in the list.
+    //○ Whenever the current node is updated you should update this node.
+    //○ This node is only null if current is equal to first.
+    //○ If current is null then this node should be the last node in the list
     protected Node previous;
 
     //The number of elements stored in the list.
@@ -30,42 +40,37 @@ public class MyLinkedList <Type extends Comparable<Type>> {
     public MyLinkedList() {
     }
 
-    //- Adds the item before the current node.
+    //Adds the item before the current node.
+    //○ This method adds the item between the previous node and the current
+    //node.
+    //○ If the current node is null the new element is added in the last position.
+    //○ If the current node is the first node then the new element becomes the
+    //new first node.
+    //○ This method should run in O(1) time.
     public void addBefore(Type item) {
+        // Create a new node that will point to 'current'
+        Node newNode = new Node(item, current);
 
-
-        // if the current node is null add to the last position of the list
-        if (current == null) {
-            // when the list is empty
-            if(size == 0) {
-                Node newNode = new Node(item, null);
+        if (current == null) {  // Case: Add at the end of the list
+            if (size == 0) {  // If the list is empty, new node becomes the first node
                 first = newNode;
-
-            } else {
-                // Find the last node in the list
+            } else {  // Find the last node and add newNode there
                 Node last = first;
                 while (last.next != null) {
                     last = last.next;
                 }
-
-                // Add the new node after the last node
-                last.next = new Node(item, null);
+                last.next = newNode;
             }
-            //when the first node is the current node.
-        } else if (first == current ) {
-            Node newNode = new Node(item, current);
-            previous = newNode;
-            first = newNode;
-            //adding between the previous and current node.
-        } else {
-            Node newNode = new Node(item, current);
-            previous.next = newNode;
-            previous = newNode;
+        } else if (current == first) {  // Case: Add before the first node
+            first = newNode;  // Update 'first' to point to newNode
+        } else {  // Case: Add between 'previous' and 'current'
+            previous.next = newNode;  // Link previous node to newNode
         }
 
-        size++;
+        // Update 'previous' to point to the newly added node
+        previous = newNode;
+        size++;  // Increment the size of the list
     }
-
 
     // Adds the item after the current node.
     public void addAfter(Type item){
@@ -145,9 +150,9 @@ public class MyLinkedList <Type extends Comparable<Type>> {
 
     //Sets the current node to be the first node.
     public Type first (){
-            current = first;
-            previous = null;
-            return current.item;
+        current = first;
+        previous = null;
+        return current.item;
 
     }
     // helper method to set the current node to be the first node.
@@ -162,8 +167,8 @@ public class MyLinkedList <Type extends Comparable<Type>> {
     public Type next(){
 
 
-            previous = current;
-            current = current.next;
+        previous = current;
+        current = current.next;
 
 
         return current.item;
@@ -206,5 +211,7 @@ public class MyLinkedList <Type extends Comparable<Type>> {
         sb.append("]");
         return sb.toString();
     }
+
+
 }
 
